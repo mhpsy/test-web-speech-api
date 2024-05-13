@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>语音识别示例</title>
+</head>
+<body>
+    <button id="start-btn">开始语音识别</button>
+    <p id="text">请点击上面的按钮并开始说话...</p>
+
+    <script>
+        const textElement = document.getElementById('text');
+        const startBtn = document.getElementById('start-btn');
+
+        // 检查浏览器是否支持Web Speech API
+        if ('webkitSpeechRecognition' in window) {
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = 'zh-CN'; // 设置语言
+            recognition.continuous = true; // 设置连续识别模式
+            recognition.interimResults = true; // 返回临时结果
+
+            recognition.onresult = function(event) {
+                let finalTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    }
+                }
+                textElement.textContent = finalTranscript;
+            };
+
+            recognition.onerror = function(event) {
+                textElement.textContent = '语音识别错误: ' + event.error;
+            };
+
+            startBtn.onclick = function() {
+                recognition.start(); // 开始识别
+            };
+        } else {
+            textElement.textContent = '抱歉，您的浏览器不支持语音识别功能。';
+        }
+    </script>
+</body>
+</html>
