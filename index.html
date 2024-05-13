@@ -20,6 +20,7 @@
             recognition.interimResults = true; // 返回临时结果
 
             recognition.onresult = function(event) {
+                console.log(event);
                 let finalTranscript = '';
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
@@ -30,6 +31,7 @@
             };
 
             recognition.onerror = function(event) {
+                console.log(event);
                 textElement.textContent = '语音识别错误: ' + event.error;
             };
 
